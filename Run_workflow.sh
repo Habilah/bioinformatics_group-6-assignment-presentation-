@@ -1,55 +1,107 @@
+
 #!/bin/bash
+# ===========================================================
+# ANA 4315 - Introduction to Bioinformatics CA1
+# Bash Automation Script
+# Clones repo, runs all scripts, and generates CSV output
+# ===========================================================
 
-# Create CSV header
-echo "Name,Email,Slack Username,Area of Interest" > artifacts/output.csv
+# ---------- CONFIGURATION ----------
+REPO_URL="https://github.com/yourgroupname/ana4315-ca1.git"
+REPO_DIR="ana4315-ca1"
+OUTPUT_DIR="output"
+CSV_FILE="$OUTPUT_DIR/group_data.csv"
+SCRIPTS_DIR="scripts"
+# ------------------------------------
 
-# Run Python scripts
-for file in scripts/*.py; do
-python "$file" >> artifacts/output.csv
-done
+echo "=========================================="
+echo " ANA 4315 CA1 - Automation Script"
+echo "=========================================="
 
-# Run R scripts
-for file in scripts/*.R; do
-Rscript "$file" >> artifacts/output.csv
-done
+# Step 1: Clone the repository
+echo ""
+echo "[1/4] Cloning repository..."
+if [ -d "$REPO_DIR" ]; then
+    echo "  Repository already exists. Pulling latest changes..."
+    cd "$REPO_DIR" && git pull && cd ..
+else
+    git clone "$REPO_URL" "$REPO_DIR"
+    if [ $? -ne 0 ]; then
+        echo "  ERROR: Failed to clone repository. Check the URL."
+        exit 1
+    fi
+fi
+echo "  Done."
 
-# Run Perl scripts
-for file in scripts/*.pl; do
-perl "$file" >> artifacts/output.csv
-done
+cd "$REPO_DIR"
 
-# Run JavaScript scripts
-for file in scripts/*.js; do
-node "$file" >> artifacts/output.csv
-done
+# Step 2: Create output directory
+mkdir -p "$OUTPUT_DIR"
 
-# Run Ruby scripts
-for file in scripts/*.rb; do
-ruby "$file" >> artifacts/output.csv
-done
+# Step 3: Write CSV header
+echo "Name,Email,Slack Username,Area of Interest" > "$CSV_FILE"
+echo ""
+echo "[2/4] CSV file initialized at $CSV_FILE"
 
-# Run Go scripts
-for file in scripts/*.go; do
-go run "$file" >> artifacts/output.csv
-done
+# Step 4: Execute each script and capture output
+echo ""
+echo "[3/4] Running scripts..."
 
-# Run C programs
-for file in scripts/*.c; do
-filename=$(basename "$file" .c)
-gcc "$file" -o "scripts/$filename"
-"./scripts/$filename" >> artifacts/output.csv
-done
+run_script_and_capture() {
+    local OUTPUT="$1"
 
-# Run C++ programs
-for file in scripts/*.cpp; do
-filename=$(basename "$file" .cpp)
-g++ "$file" -o "scripts/$filename"
-"./scripts/$filename" >> artifacts/output.csv
-done
+    # Parse output lines
+    NAME=$(echo "$OUTPUT"     | sed -n '1p' | tr -d '\r')
+    EMAIL=$(echo "$OUTPUT"    | sed -n '2p' | tr -d '\r')
+    SLACK=$(echo "$OUTPUT"    | sed -n '3p' | tr -d '\r')
+    INTEREST=$(echo "$OUTPUT" | sed -n '4p' | tr -d '\r')
 
-# Run Java programs
-for file in scripts/*.java; do
-filename=$(basename "$file" .java)
-javac "$file"
-java -cp scripts "$filename" >> artifacts/output.csv
-done
+    echo "  Captured: $NAME | $EMAIL | $SLACK | $INTEREST"
+    echo "\"$NAME\",\"$EMAIL\",\"$SLACK\",\"$INTEREST\"" >> "$CSV_FILE"
+}
+
+# --- Python script ---
+if [ -f "$SCRIPTS_DIR/habila_emmanuel.py" ]; then
+    echo "  Running Python script..."
+    OUT=$(python3 "$SCRIPTS_DIR/habila_emmanuel.py" 2>/dev/null)
+    run_script_and_capture "$OUT"
+fi
+
+# --- R script ---
+if [ -f "$SCRIPTS_DIR/member2.R" ]; then
+    echo "  Running R script..."
+    OUT=$(Rscript "$SCRIPTS_DIR/member2.R" 2>/dev/null)
+    run_script_and_capture "$OUT"
+fi
+
+# --- Perl script ---
+if [ -f "$SCRIPTS_DIR/member3.pl" ]; then
+    echo "  Running Perl script..."
+    OUT=$(perl "$SCRIPTS_DIR/member3.pl" 2>/dev/null)
+    run_script_and_capture "$OUT"
+fi
+
+# --- JavaScript script ---
+if [ -f "$SCRIPTS_DIR/member4.js" ]; then
+    echo "  Running JavaScript script..."
+    OUT=$(node "$SCRIPTS_DIR/member4.js" 2>/dev/null)
+    run_script_and_capture "$OUT"
+fi
+
+# --- Java script ---
+if [ -f "$SCRIPTS_DIR/member5.java" ]; then
+    echo "  Compiling and running Java script..."
+    javac "$SCRIPTS_DIR/member5.java" -d "$SCRIPTS_DIR/" 2>/dev/null
+    OUT=$(java -cp "$SCRIPTS_DIR" member5 2>/dev/null)
+    run_script_and_capture "$OUT"
+fi
+
+# Step 5: Display result
+echo ""
+echo "[4/4] CSV generation complete!"
+echo ""
+echo "=========================================="
+echo " OUTPUT: $CSV_FILE"
+echo "=========================================="
+cat "$CSV_FILE"
+echo "=====================================

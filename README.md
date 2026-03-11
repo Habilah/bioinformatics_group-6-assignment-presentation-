@@ -14,7 +14,9 @@ Some key areas of bioinformatics include:
 🧪 Proteogenomics — integration of proteomic and genomic data
 💊 Drug Discovery — computational identification of drug targets
 🌿 Phylogenetics — study of evolutionary relationships
+
 III.📝 Assignment Description
+
 This project is Continuous Assessment 1 (CA1) for ANA 4315 - Introduction to Bioinformatics at SAZU. The goal is to demonstrate essential computational practices used in modern bioinformatics research, including collaborative coding, multi-language scripting, documentation, and workflow automation.
 |S/N|component|tool/languag
 |---|--------|------------|

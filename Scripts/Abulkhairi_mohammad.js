@@ -1,4 +1,1 @@
-console.log("Abulkhairi Mohammed Muhuyiddeen");
-console.log("abulkhairimm@gmail.com");
-console.log("@abulah");
-console.log("Genetics");
+console.log("Abulkhairi Mohammed Muhuyiddeen,abulkhairimm@gmail.com,@abulah,Genetics,js");

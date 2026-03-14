@@ -98,7 +98,7 @@ ana4315-ca1/
 ├── scripts/                           # Individual language scripts
 │   ├── habila_emmanuel.py             # Python      - Habila Emmanuel Habu
 │   ├── vasty_emmanuel.pl             # Perl        - Vasty Emmanuel
-│   ├── abubakar_abdulkadir.R          # R           - Abubakar Abdulkadir
+│   ├── sani_usman.R          # R           - sani usman yakubu
 │   ├── ibrahim_said.java              # Java        - Ibrahim Sa'id
 │   └── abulkhairi_mohammed.js         # JavaScript  - Abulkhairi Mohammed
 │
